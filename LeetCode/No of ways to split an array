@@ -2,7 +2,6 @@ class Solution {
 public int countWays(int nums[]) {
 long right = 0;
 long left = 0;
-int count = 0;
 for(int num: nums) {
 right+=num;
 }
