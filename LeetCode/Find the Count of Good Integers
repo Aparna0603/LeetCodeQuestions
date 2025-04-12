@@ -1,0 +1,69 @@
+class Solution {
+    public long countGoodIntegers(int n, int k) {
+        
+        Set<String> set = new HashSet<>();
+        
+        // Calculate the length of the left half
+        int d = (n + 1) / 2;
+        
+        // Start and end range for generating the left half of the palindrome
+        int start = (int) Math.pow(10, d - 1);
+        int end = (int) Math.pow(10, d) - 1;
+        
+        // Loop through all numbers in the range for the left half
+        for (int num = start; num <= end; num++) {
+            String leftHalf = Integer.toString(num);
+            String full;
+            
+            // If n is even, reflect the entire left half
+            if (n % 2 == 0) {
+                StringBuilder rightHalf = new StringBuilder(leftHalf).reverse();
+                full = leftHalf + rightHalf.toString();
+            } 
+            // If n is odd, reflect the left half excluding the last digit
+            else {
+                StringBuilder rightHalf = new StringBuilder(leftHalf.substring(0, d - 1)).reverse();
+                full = leftHalf + rightHalf.toString();
+            }
+            
+            // Parse the full palindrome and check divisibility by k
+            long number = Long.parseLong(full);
+            if (number % k != 0)
+                continue;
+            
+            // Sort the digits of the full palindrome and add to the set to ensure uniqueness
+            char[] chars = full.toCharArray();
+            Arrays.sort(chars);
+            set.add(new String(chars));
+        }
+        
+        // Precompute factorials for permutation calculations
+        long[] factorial = new long[11];
+        factorial[0] = 1;
+        for (int i = 1; i < 11; i++) {
+            factorial[i] = factorial[i - 1] * i;
+        }
+        
+        // Calculate the total number of distinct permutations for each unique palindrome
+        long res = 0;
+        for (String s : set) {
+            int[] count = new int[10];
+            for (char ch : s.toCharArray()) {
+                count[ch - '0']++;
+            }
+            
+            int totalDigits = s.length();
+            int zeroDigits = count[0];
+            int nonZeroDigits = totalDigits - zeroDigits;
+            
+            long perm = nonZeroDigits * factorial[totalDigits - 1];
+            for (int i = 0; i < 10; i++) {
+                perm /= factorial[count[i]];
+            }
+            
+            res += perm;
+        }
+        
+        return res;
+    }
+}
