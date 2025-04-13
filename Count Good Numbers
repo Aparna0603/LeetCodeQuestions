@@ -1,0 +1,24 @@
+class Solution {
+    static final int MOD = 1_000_000_007;
+
+    public int countGoodNumbers(long n) {
+        long evenPos = (n + 1) / 2; // Positions for even digits (0,2,4,6,8) → 5 choices
+        long oddPos = n / 2;        // Positions for prime digits (2,3,5,7) → 4 choices
+
+        long result = (modPow(5, evenPos) * modPow(4, oddPos)) % MOD;
+        return (int) result;
+    }
+
+    private long modPow(long base, long exp) {
+        if (exp == 0) return 1;
+
+        long half = modPow(base, exp / 2);
+        long result = (half * half) % MOD;
+
+        if (exp % 2 == 1) {
+            result = (result * base) % MOD;
+        }
+
+        return result;
+    }
+}
