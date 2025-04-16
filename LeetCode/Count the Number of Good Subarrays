@@ -1,0 +1,33 @@
+class Solution {
+    public long countGood(int[] nums, int k) {
+        int n = nums.length;
+        var counts = new HashMap<Integer, Integer>();
+        long current = 0;
+        int right = 0;
+        while (right < n) {
+            int num = nums[right];
+            current += counts.getOrDefault(num, 0);
+            counts.put(num, counts.getOrDefault(num, 0) + 1);
+            if (current >= k) break;
+            right++;
+        }
+
+        long ans = 0;
+        int left = 0;
+        while (right < n) {
+            ans += n - right;
+            current -= counts.get(nums[left]) - 1;
+            counts.put(nums[left], counts.get(nums[left]) - 1);
+            left++;
+            while (current < k) {
+                right++;
+                if (right == n) break;
+                int num = nums[right];
+                current += counts.getOrDefault(num, 0);
+                counts.put(num, counts.getOrDefault(num, 0) + 1);
+            }
+        }
+
+        return ans;
+    }
+}
