@@ -1,0 +1,13 @@
+class Solution {
+public static String duplicate(String str) {
+Set<String> set = new HashSet<>();
+for(int i=0; i<n; i++) {
+set.add(str.charAt(i));
+if(set.contains(str.charAt(i))) {
+return String.valueOf(str.charAt(i));
+}
+set.add(str.charAt(i));
+}
+return " ";
+}
+}
