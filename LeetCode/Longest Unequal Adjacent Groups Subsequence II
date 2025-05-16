@@ -1,0 +1,33 @@
+import java.util.*;
+
+class Solution {
+    public List<String> getWordsInLongestSubsequence(String[] words, int[] groups) {
+        int n = words.length, dp[] = new int[n], prev[] = new int[n], maxIdx = 0;
+        Arrays.fill(dp, 1);
+        Arrays.fill(prev, -1);
+
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                if (groups[i] != groups[j] && hasHammingDistOne(words[i], words[j]) && dp[j] + 1 > dp[i]) {
+                    dp[i] = dp[j] + 1;
+                    prev[i] = j;
+                }
+            }
+            if (dp[i] > dp[maxIdx]) maxIdx = i;
+        }
+
+        List<String> res = new ArrayList<>();
+        for (int i = maxIdx; i >= 0; i = prev[i]) res.add(words[i]);
+        Collections.reverse(res);
+        return res;
+    }
+
+    private boolean hasHammingDistOne(String s1, String s2) {
+        if (s1.length() != s2.length()) return false;
+        int diff = 0;
+        for (int i = 0; i < s1.length(); i++) {
+            if (s1.charAt(i) != s2.charAt(i) && ++diff > 1) return false;
+        }
+        return diff == 1;
+    }
+}
