@@ -1,0 +1,45 @@
+import java.util.*;
+class Solution {
+    HashMap<Integer, HashMap<Integer,Integer>> map = new HashMap<>();
+    int MOD = 1000000007;
+    public int pow(int m, int n) {
+        if (n == 0) return 1;
+        if (n == 1) return m % MOD;
+        int mid = n / 2;
+        int prev = pow(m, mid);
+        int inter = (int)(1L * prev * prev % MOD);
+        return (n % 2 == 0) ? inter : (int)(1L * inter * m % MOD);
+    }
+
+    public int colorTheGrid(int m, int n) {
+        f(0,0,0,0,2,m);
+        HashMap<Integer, Integer> xs = map.get(0);
+        for(int i = 0; i < n-1; i++){
+            HashMap<Integer, Integer> ys = new HashMap<Integer, Integer>();
+            for(int x: xs.keySet())
+                if(map.get(x) != null)
+                    for(int y: map.get(x).keySet()) {
+                        ys.put(y, ((int)(map.get(x).get(y)*1L*(xs.get(x)))%MOD + ys.getOrDefault(y,0))%MOD);
+                    }
+            xs = ys;
+        }
+        int res = 0;
+        for(int x: xs.keySet()) res = (res + xs.get(x))%MOD;
+        return res;
+    }
+    public int f(int col, int row, int curr, int next, int limit, int n) {
+        if(col == limit) {return 1;}
+        if(row == n) {
+            HashMap<Integer,Integer> xs = map.getOrDefault(curr,new HashMap<Integer,Integer>());
+            xs.put(next, xs.getOrDefault(next,0) + 1);
+            map.put(curr, xs);
+            return f(col + 1, 0, next, 0, limit,n);}
+        int res = 0;
+        for(int i = 0; i < 3; i++) {
+            if((curr >> (3*row + i))%2 == 0 && (row == 0 || (next>>(3*(row-1) + i))%2 == 0)) {
+                int t = next;next |= (1 << (3*row+i)); res += f(col,row+1,curr,next, limit,n); next = t;
+            }
+        }
+        return res;
+    }
+}
