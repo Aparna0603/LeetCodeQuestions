@@ -1,0 +1,21 @@
+class Solution {
+    public int differenceOfSums(int n, int m) {
+        int sum1 = 0;
+       int diff;
+      int num1=0 ,num2=0;
+        for(int i=1; i<=n; i++) {
+            sum1 = i;
+            if(sum1%m!=0) {
+               num1 += sum1;
+            }
+            else {
+                num2 += sum1;
+            }
+        }
+             diff = num1-num2;
+          
+        
+        return diff;
+
+    }
+}
