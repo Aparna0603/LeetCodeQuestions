@@ -1,0 +1,47 @@
+class Solution {
+    private int bfs(List<List<Integer>> tree,int k,int n,int x){
+        int ans=0;
+        boolean[] vis=new boolean[n+1];
+        Queue<Integer> q=new LinkedList<>();
+        q.offer(x);
+        vis[x]=true;
+        while(!q.isEmpty()&&k>=0){
+            int len=q.size();
+            ans+=len;
+            for(int i=0;i<len;i++){
+                int node=q.poll();
+                for(Integer it:tree.get(node)){
+                    if(!vis[it]){
+                        q.offer(it);
+                        vis[it]=true;
+                    }
+                }
+            }
+            k--;
+        }
+        return ans;
+    }
+    public int[] maxTargetNodes(int[][] edges1, int[][] edges2, int k) {
+        int n=edges1.length,m=edges2.length;
+        List<List<Integer>> tree1=new ArrayList<>();
+        List<List<Integer>> tree2=new ArrayList<>();
+        for(int i=0;i<=n;i++) tree1.add(new ArrayList<>());
+        for(int i=0;i<=m;i++) tree2.add(new ArrayList<>());
+        for(int[] edge:edges1){
+            int u=edge[0],v=edge[1];
+            tree1.get(u).add(v);
+            tree1.get(v).add(u);
+        }
+        for(int[] edge:edges2){
+            int u=edge[0],v=edge[1];
+            tree2.get(u).add(v);
+            tree2.get(v).add(u);
+        }
+        int max=0;
+        for(int i=0;i<=m;i++) max=Math.max(bfs(tree2,k-1,m,i),max);
+        int[] ans=new int[n+1];
+        Arrays.fill(ans,max);
+        for(int i=0;i<=n;i++) ans[i]+=bfs(tree1,k,n,i);
+        return ans;
+    }
+}
