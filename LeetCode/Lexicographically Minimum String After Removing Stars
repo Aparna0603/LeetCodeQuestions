@@ -1,0 +1,43 @@
+class Solution {
+   
+    public class Pair {
+        char c;
+        int idx;
+
+        Pair(char c, int idx) {
+            this.c = c;
+            this.idx = idx;
+        }
+    }
+
+    public String clearStars(String s) {
+
+        StringBuilder sb = new StringBuilder();
+       
+        PriorityQueue<Pair> pq = new PriorityQueue<>((a, b) -> a.c == b.c ? b.idx - a.idx : a.c - b.c);
+
+        for(int i=0; i<s.length(); i++) {
+            
+            char c = s.charAt(i);
+            sb.append(c);   
+
+            if(c != '*') {  
+                Pair p = new Pair(c, i);
+                pq.offer(p);
+            }
+            if(c == '*') {  
+                sb.setCharAt(pq.poll().idx, '1');
+            }
+        }
+
+        
+        for(int i=0; i<sb.length(); i++) {
+            char c = sb.charAt(i);
+            if(c == '*' || c == '1') {
+                sb.deleteCharAt(i);
+                i--;
+            }
+        }
+        return sb.toString();
+    }
+}
