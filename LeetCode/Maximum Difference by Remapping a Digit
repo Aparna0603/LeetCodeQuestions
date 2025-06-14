@@ -1,0 +1,14 @@
+class Solution {
+    public int minMaxDifference(int num) {
+        int maxNum = num;
+        String str = String.valueOf(num);
+        for (char ch: str.toCharArray()) {
+            if (ch != '9') {
+                String maxStr = str.replaceAll(ch + "", "9");
+                maxNum = Integer.parseInt(maxStr);
+                break;
+            }
+        }
+        return maxNum - Integer.parseInt(str.replaceAll(str.charAt(0) + "", "0"));
+    }
+}
